@@ -39,9 +39,6 @@ public class CreateView extends JPanel implements ActionListener {
 	private JButton createAccount;
 	private JButton cancelButton;
 	private JLabel errorMessageLabel;
-	//private char status;
-	//private long accountNumber;
-	//private double balance;
 	private User user;
 	private BankAccount account;
 	private String states;
