@@ -2,11 +2,13 @@ package controller;
 
 import java.awt.CardLayout;
 import java.awt.Container;
+import java.sql.SQLException;
 
 import javax.swing.JOptionPane;
 
 import data.Database;
 import model.BankAccount;
+//import model.User;
 import view.ATM;
 import view.LoginView;
 
@@ -15,8 +17,8 @@ public class ViewManager {
 	private Container views;				// the collection of all views in the application
 	private Database db;					// a reference to the database
 	private BankAccount account;			// the user's bank account
-	private BankAccount destination;		// an account to which the user can transfer funds
-	
+	//private BankAccount destination;		// an account to which the user can transfer funds
+	//private User user;
 	/**
 	 * Constructs an instance (or object) of the ViewManager class.
 	 * 
@@ -54,6 +56,15 @@ public class ViewManager {
 		} catch (NumberFormatException e) {
 			// ignore
 		}
+	}
+	
+	public long newAccountNumber() throws SQLException {
+		long accountNum =  1 + db.getMaxAccountNumber();
+		return accountNum;
+	}
+	
+	public void newAccount(BankAccount account) {
+		db.insertAccount(account);
 	}
 	
 	/**

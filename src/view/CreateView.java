@@ -1,11 +1,12 @@
 package view;
 
-import java.awt.Color;
+//import java.awt.Color;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.IOException;
 import java.io.ObjectOutputStream;
+import java.sql.SQLException;
 
 import javax.swing.JButton;
 import javax.swing.JComboBox;
@@ -16,6 +17,8 @@ import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 
 import controller.ViewManager;
+import model.BankAccount;
+import model.User;
 
 @SuppressWarnings("serial")
 public class CreateView extends JPanel implements ActionListener {
@@ -23,7 +26,7 @@ public class CreateView extends JPanel implements ActionListener {
 	private ViewManager manager;		// manages interactions between the views, model, and database
 	private JTextField firstName;
 	private JTextField lastName;
-	private JTextField dateOB;
+	private String dateOB;
 	private JComboBox<String> month;
 	private JComboBox<String> day;
 	private JComboBox<String> year;
@@ -36,6 +39,12 @@ public class CreateView extends JPanel implements ActionListener {
 	private JButton createAccount;
 	private JButton cancelButton;
 	private JLabel errorMessageLabel;
+	//private char status;
+	//private long accountNumber;
+	//private double balance;
+	private User user;
+	private BankAccount account;
+	private String states;
 	/**
 	 * Constructs an instance (or object) of the CreateView class.
 	 * 
@@ -117,13 +126,13 @@ public class CreateView extends JPanel implements ActionListener {
 	private void initDateOB() {
 		JLabel label = new JLabel("Date OB:", SwingConstants.RIGHT);
 		label.setBounds(35, 130, 95, 30);
-		label.setLabelFor(dateOB);
+		label.setLabelFor(year);
 		label.setFont(new Font("DialogInput", Font.BOLD, 12));
 
 		
-		JComboBox<String> year = new JComboBox<String>();
-		JComboBox<String> month = new JComboBox<String>();
-		JComboBox<String> day = new JComboBox<String>();
+		year = new JComboBox<String>();
+		month = new JComboBox<String>();
+		day = new JComboBox<String>();
 		
 		year.addItem("1980");
 		year.addItem("1981");
@@ -190,6 +199,8 @@ public class CreateView extends JPanel implements ActionListener {
 		//dateOB.setBounds(125, 130, 200, 30);
 		//dateOB.addActionListener(this);
 		
+		dateOB = (String) year.getSelectedItem() + (String) month.getSelectedItem() + (String) day.getSelectedItem();
+		//dateOB = Integer.parseInt(dateOB);
 		this.add(label);
 		this.add(year);
 		this.add(month);
@@ -256,7 +267,7 @@ public class CreateView extends JPanel implements ActionListener {
 	private void initState() {
 		
 		
-		JComboBox<String> state = new JComboBox<String>();
+		state = new JComboBox<String>();
 		 
 		// add items to the combo box
 		state.addItem("AL");
@@ -316,8 +327,11 @@ public class CreateView extends JPanel implements ActionListener {
 		label.setLabelFor(state);
 		label.setFont(new Font("DialogInput", Font.BOLD, 12));
 		
+		//state = new JComboBox<String>();
 		state.setBounds(125, 330, 200, 30);
 		state.addActionListener(this);
+		
+		states = (String) state.getSelectedItem();
 		
 		this.add(label);
 		this.add(state);
@@ -353,13 +367,21 @@ public class CreateView extends JPanel implements ActionListener {
 		this.add(cancelButton);
 	}
 	
-	private void initErrorMessageLabel() {
-		errorMessageLabel.setBounds(0, 240, 500, 35);
-		errorMessageLabel.setFont(new Font("DialogInput", Font.ITALIC, 14));
-		errorMessageLabel.setForeground(Color.RED);
-		
-		this.add(errorMessageLabel);
+	public User newUser(int pin, int dob, long phone, String firstName, String lastName, String streetAddress, String city, String state, String zip) {
+		user = new User(pin, dob, phone, firstName, lastName, streetAddress, city, state, zip);
+		return user; 
 	}
+	
+	public BankAccount accessBankaccount() throws SQLException {
+		String s = new String(pin.getPassword());
+		int pin = Integer.parseInt(s);
+		//String stated = (String) state.getSelectedItem();
+		int ddateOB = Integer.parseInt(dateOB);
+		long accountnum = manager.newAccountNumber();
+		account = new BankAccount('Y', accountnum, 0.00, newUser(pin, ddateOB, Integer.parseInt(phone.getText()), firstName.getText(), lastName.getText(), streetAddress.getText(), city.getText(), states, zip.getText()));
+		return account;
+	}
+	
 	/*
 	 * CreateView is not designed to be serialized, and attempts to serialize will throw an IOException.
 	 * 
@@ -386,6 +408,12 @@ public class CreateView extends JPanel implements ActionListener {
 			manager.switchTo(ATM.LOGIN_VIEW);
 		}
 		else if(source.equals(createAccount)) {
+			try {
+				manager.newAccount(accessBankaccount());
+			} catch (SQLException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
 			manager.switchTo(ATM.HOME_VIEW);
 		}
 		else {
@@ -398,13 +426,5 @@ public class CreateView extends JPanel implements ActionListener {
 		// user clicking a button, typing in a textfield, etc.).
 		//
 		// feel free to use my action listener in LoginView.java as an example.
-	}
-
-	public JComboBox<String> getState() {
-		return state;
-	}
-
-	public void setState(JComboBox<String> state) {
-		this.state = state;
 	}
 }
