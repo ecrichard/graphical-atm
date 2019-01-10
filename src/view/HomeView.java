@@ -1,20 +1,32 @@
 package view;
 
+//import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.IOException;
 import java.io.ObjectOutputStream;
 
 import javax.swing.JButton;
+//import javax.swing.JLabel;
 import javax.swing.JPanel;
+//import javax.swing.SwingConstants;
 
 import controller.ViewManager;
+//import model.BankAccount;
 
 @SuppressWarnings("serial")
 public class HomeView extends JPanel implements ActionListener {
 	
 	private ViewManager manager;		// manages interactions between the views, model, and database
 	private JButton loginButton;
+	private JButton depositButton;
+	private JButton withdrawButton;
+	private JButton transferButton;
+	private long number;
+	private String first;
+	private String last;
+	public double balance;
+	//private BankAccount account;
 	/**
 	 * Constructs an instance (or objects) of the HomeView class.
 	 * 
@@ -43,6 +55,8 @@ public class HomeView extends JPanel implements ActionListener {
 		
 		this.add(new javax.swing.JLabel("HomeView", javax.swing.SwingConstants.CENTER));
 		initLoginButton();
+		
+		//initDisplayInfo();
 		// TODO
 		//
 		// this is where you should build the HomeView (i.e., all the components that
@@ -57,6 +71,45 @@ public class HomeView extends JPanel implements ActionListener {
 		loginButton.addActionListener(this);
 		
 		this.add(loginButton);
+	}
+	
+	public void initDisplayInfo() {
+		//System.out.println(helpaccount.accountNum);
+		number = manager.getAccountNum();
+		first = manager.getFirst();
+		last = manager.getLast();
+		balance = manager.getBalance();
+		
+		
+		
+		this.add(new javax.swing.JLabel("\nFirst name: " + first, javax.swing.SwingConstants.CENTER));
+		this.add(new javax.swing.JLabel("\nLast name: " + last, javax.swing.SwingConstants.CENTER));
+		this.add(new javax.swing.JLabel("\nAccount Number: " + number, javax.swing.SwingConstants.CENTER));
+		this.add(new javax.swing.JLabel("\nBalance: $" + balance, javax.swing.SwingConstants.CENTER));
+	}
+	
+	public void initDepositButton() {
+		depositButton = new JButton("Deposit");
+		//depositButton.setBounds(205, 180, 200, 35);
+		depositButton.addActionListener(this);
+		
+		this.add(depositButton);
+	}
+	
+	public void initWithdrawButton() {
+		withdrawButton = new JButton("Withdraw");
+		//depositButton.setBounds(205, 180, 200, 35);
+		withdrawButton.addActionListener(this);
+		
+		this.add(withdrawButton);
+	}
+	
+	public void initTransferButton() {
+		transferButton = new JButton("Transfer");
+		//depositButton.setBounds(205, 180, 200, 35);
+		transferButton.addActionListener(this);
+		
+		this.add(transferButton);
 	}
 	
 	/*
@@ -81,9 +134,18 @@ public class HomeView extends JPanel implements ActionListener {
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		Object source = e.getSource();
-		
 		if (source.equals(loginButton)) {
 			manager.switchTo(ATM.LOGIN_VIEW);
+			this.setLayout(null);
+		}
+		else if (source.equals(depositButton)) {
+			manager.switchTo(ATM.DEPOSIT_VIEW);
+		}
+		else if(source.equals(withdrawButton)) {
+			manager.switchTo(ATM.WITHDRAW_VIEW);
+		}
+		else if(source.equals(transferButton)) {
+			manager.switchTo(ATM.TRANSFER_VIEW);
 		}
 		// TODO
 		//

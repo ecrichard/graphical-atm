@@ -100,7 +100,6 @@ public class CreateView extends JPanel implements ActionListener {
 		
 		firstName = new JTextField(20);
 		firstName.setBounds(125, 50, 200, 30);
-		firstName.addActionListener(this);
 		
 		this.add(label);
 		this.add(firstName);
@@ -114,7 +113,6 @@ public class CreateView extends JPanel implements ActionListener {
 		
 		lastName = new JTextField(20);
 		lastName.setBounds(125, 90, 200, 30);
-		lastName.addActionListener(this);
 		
 		this.add(label);
 		this.add(lastName);
@@ -140,7 +138,6 @@ public class CreateView extends JPanel implements ActionListener {
 		
 		
 		year.setBounds(125, 130, 100, 30);
-		year.addActionListener(this);
 		
 		month.addItem("01");
 		month.addItem("02");
@@ -156,7 +153,6 @@ public class CreateView extends JPanel implements ActionListener {
 		month.addItem("12");
 		
 		month.setBounds(225, 130, 70, 30);
-		month.addActionListener(this);
 		
 		day.addItem("01");
 		day.addItem("02");
@@ -191,7 +187,6 @@ public class CreateView extends JPanel implements ActionListener {
 		day.addItem("31");
 
 		day.setBounds(285, 130, 70, 30);
-		day.addActionListener(this);
 		//dateOB = new JTextField(20);
 		//dateOB.setBounds(125, 130, 200, 30);
 		//dateOB.addActionListener(this);
@@ -213,7 +208,6 @@ public class CreateView extends JPanel implements ActionListener {
 		
 		phone = new JTextField(20);
 		phone.setBounds(125, 170, 200, 30);
-		phone.addActionListener(this);
 		
 		this.add(label);
 		this.add(phone);
@@ -227,7 +221,6 @@ public class CreateView extends JPanel implements ActionListener {
 		
 		pin = new JPasswordField(20);
 		pin.setBounds(125, 210, 200, 30);
-		pin.addActionListener(this);
 		
 		this.add(label);
 		this.add(pin);
@@ -241,7 +234,6 @@ public class CreateView extends JPanel implements ActionListener {
 		
 		streetAddress = new JTextField(20);
 		streetAddress.setBounds(125, 250, 200, 30);
-		streetAddress.addActionListener(this);
 		
 		this.add(label);
 		this.add(streetAddress);
@@ -255,7 +247,6 @@ public class CreateView extends JPanel implements ActionListener {
 		
 		city = new JTextField(20);
 		city.setBounds(125, 290, 200, 30);
-		city.addActionListener(this);
 		
 		this.add(label);
 		this.add(city);
@@ -326,7 +317,6 @@ public class CreateView extends JPanel implements ActionListener {
 		
 		//state = new JComboBox<String>();
 		state.setBounds(125, 330, 200, 30);
-		state.addActionListener(this);
 		
 		states = (String) state.getSelectedItem();
 		
@@ -342,7 +332,6 @@ public class CreateView extends JPanel implements ActionListener {
 		
 		zip = new JTextField(20);
 		zip.setBounds(125, 370, 200, 30);
-		zip.addActionListener(this);
 		
 		this.add(label);
 		this.add(zip);
@@ -369,13 +358,14 @@ public class CreateView extends JPanel implements ActionListener {
 		return user; 
 	}
 	
+	
 	public BankAccount accessBankaccount() throws SQLException {
 		String s = new String(pin.getPassword());
 		int pin = Integer.parseInt(s);
 		//String stated = (String) state.getSelectedItem();
 		int ddateOB = Integer.parseInt(dateOB);
 		long accountnum = manager.newAccountNumber();
-		account = new BankAccount('Y', accountnum, 0.00, newUser(pin, ddateOB, Integer.parseInt(phone.getText()), firstName.getText(), lastName.getText(), streetAddress.getText(), city.getText(), states, zip.getText()));
+		account = new BankAccount('Y', accountnum, 0.00, newUser(pin, ddateOB, Long.parseLong(phone.getText()), firstName.getText(), lastName.getText(), streetAddress.getText(), city.getText(), states, zip.getText()));
 		return account;
 	}
 	
@@ -405,15 +395,22 @@ public class CreateView extends JPanel implements ActionListener {
 			manager.switchTo(ATM.LOGIN_VIEW);
 		}
 		else if(source.equals(createAccount)) {
+			BankAccount ba = null;
+			
 			try {
-				manager.newAccount(accessBankaccount());
+				ba = accessBankaccount();				
+				manager.newAccount(ba);
 			} catch (SQLException e1) {
 				// TODO Auto-generated catch block
 				e1.printStackTrace();
 			}
-			manager.switchTo(ATM.HOME_VIEW);
-		}
-		else {
+			//manager.switchTo(ATM.HOME_VIEW);
+			String s = new String(pin.getPassword());
+			char[] pinn = s.toCharArray();
+			String account;
+			account = String.valueOf(ba.getAccountNumber());
+			manager.login(account, pinn);
+		} else {
 			System.err.println("ERROR: Action command not found (" + e.getActionCommand() + ")");
 		}
 		// TODO

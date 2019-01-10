@@ -10,12 +10,13 @@ import data.Database;
 import model.BankAccount;
 //import model.User;
 import view.ATM;
+import view.HomeView;
 import view.LoginView;
 
 public class ViewManager {
 	
 	private Container views;				// the collection of all views in the application
-	private Database db;					// a reference to the database
+	public Database db;					// a reference to the database
 	private BankAccount account;			// the user's bank account
 	//private BankAccount destination;		// an account to which the user can transfer funds
 	//private User user;
@@ -52,10 +53,31 @@ public class ViewManager {
 				
 				LoginView lv = ((LoginView) views.getComponents()[ATM.LOGIN_VIEW_INDEX]);
 				lv.updateErrorMessage("");
+				
+				HomeView hv = ((HomeView) views.getComponents()[ATM.HOME_VIEW_INDEX]);
+				hv.initDisplayInfo();
+				hv.initDepositButton();
+				hv.initWithdrawButton();
+				hv.initTransferButton();
 			}
 		} catch (NumberFormatException e) {
 			// ignore
 		}
+	}
+	
+	public void create() {
+		try {
+			switchTo(ATM.HOME_VIEW);
+			HomeView hv = ((HomeView) views.getComponents()[ATM.HOME_VIEW_INDEX]);
+			hv.initDisplayInfo();
+			hv.initDepositButton();
+			hv.initWithdrawButton();
+			hv.initTransferButton();
+		}
+		catch (NumberFormatException e) {
+			// ignore
+		}
+
 	}
 	
 	public long newAccountNumber() throws SQLException {
@@ -65,6 +87,42 @@ public class ViewManager {
 	
 	public void newAccount(BankAccount account) {
 		db.insertAccount(account);
+	}
+	
+	public long getAccountNum() {
+		long accountnum = account.getAccountNumber();
+		return accountnum;
+	}
+	
+	public String getLast() {
+		String lastname = account.getUser().getLastName();
+		return lastname;
+	}
+	
+	public String getFirst() {
+		String firstname = account.getUser().getFirstName();
+		return firstname;
+	}
+	
+	public double getBalance() {
+		double balance = account.getBalance();
+		return balance;
+	}
+	
+	public void deposit(double amount) {
+		account.deposit(amount);
+		db.updateAccount(account);
+	}
+	
+	public void withdraw(double amount) {
+		account.withdraw(amount);
+		db.updateAccount(account);
+	}
+	
+	public void transfer(double amount, BankAccount destination) {
+		account.transfer(destination, amount);
+		db.updateAccount(destination);
+		db.updateAccount(account);
 	}
 	
 	/**

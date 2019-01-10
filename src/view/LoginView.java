@@ -31,6 +31,7 @@ public class LoginView extends JPanel implements ActionListener {
 	private JPasswordField pinField;		// textfield where the user enters his or her PIN
 	private JLabel errorMessageLabel;		// label for potential error messages
 	
+	
 	/**
 	 * Constructs an instance (or objects) of the LoginView class.
 	 * 
@@ -165,6 +166,8 @@ public class LoginView extends JPanel implements ActionListener {
 		this.add(powerButton);
 	}
 	
+	
+	
 	/*
 	 * LoginView is not designed to be serialized, and attempts to serialize will throw an IOException.
 	 * 
@@ -175,7 +178,7 @@ public class LoginView extends JPanel implements ActionListener {
 	private void writeObject(ObjectOutputStream oos) throws IOException {
 		throw new IOException("ERROR: The LoginView class is not serializable.");
 	}
-
+	
 	///////////////////// OVERRIDDEN METHODS //////////////////////////////////////////
 	
 	/*
@@ -189,6 +192,7 @@ public class LoginView extends JPanel implements ActionListener {
 		Object source = e.getSource();
 		
 		if (source.equals(loginButton)) {
+			
 			manager.login(accountField.getText(), pinField.getPassword());
 		} else if (source.equals(createButton)) {
 			manager.switchTo(ATM.CREATE_VIEW);
@@ -199,3 +203,5 @@ public class LoginView extends JPanel implements ActionListener {
 		}
 	}
 }
+
+
