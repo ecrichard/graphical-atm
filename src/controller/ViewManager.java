@@ -31,7 +31,7 @@ public class ViewManager {
 		this.views = views;
 		this.db = new Database();
 	}
-	
+	  
 	///////////////////// INSTANCE METHODS ////////////////////////////////////////////
 	
 	/**
