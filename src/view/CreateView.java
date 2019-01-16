@@ -7,7 +7,7 @@ import java.awt.event.ActionListener;
 import java.io.IOException;
 import java.io.ObjectOutputStream;
 import java.sql.SQLException;
-
+//import javafx.scene.control.DatePicker;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
@@ -30,7 +30,9 @@ public class CreateView extends JPanel implements ActionListener {
 	private JComboBox<String> month;
 	private JComboBox<String> day;
 	private JComboBox<String> year;
-	private JTextField phone;
+	private JTextField phone1;
+	private JTextField phone2;
+	private JTextField phone3;
 	private JPasswordField pin;
 	private JTextField streetAddress;
 	private JTextField city;
@@ -42,6 +44,7 @@ public class CreateView extends JPanel implements ActionListener {
 	private User user;
 	private BankAccount account;
 	private String states;
+	//private JDatePicker birthday;
 	/**
 	 * Constructs an instance (or object) of the CreateView class.
 	 * 
@@ -118,6 +121,7 @@ public class CreateView extends JPanel implements ActionListener {
 		this.add(lastName);
 	}
 	
+	
 	private void initDateOB() {
 		JLabel label = new JLabel("Date OB:", SwingConstants.RIGHT);
 		label.setBounds(35, 130, 95, 30);
@@ -129,12 +133,64 @@ public class CreateView extends JPanel implements ActionListener {
 		month = new JComboBox<String>();
 		day = new JComboBox<String>();
 		
+		
+		
+		year.addItem("1950");
+		year.addItem("1951");
+		year.addItem("1952");
+		year.addItem("1953");
+		year.addItem("1954");
+		year.addItem("1956");
+		year.addItem("1957");
+		year.addItem("1958");
+		year.addItem("1959");
+		year.addItem("1960");
+		year.addItem("1961");
+		year.addItem("1962");
+		year.addItem("1963");
+		year.addItem("1964");
+		year.addItem("1965");
+		year.addItem("1966");
+		year.addItem("1967");
+		year.addItem("1968");
+		year.addItem("1969");
+		year.addItem("1970");
+		year.addItem("1971");
+		year.addItem("1972");
+		year.addItem("1973");
+		year.addItem("1974");
+		year.addItem("1975");
+		year.addItem("1976");
+		year.addItem("1977");
+		year.addItem("1978");
+		year.addItem("1979");
 		year.addItem("1980");
 		year.addItem("1981");
 		year.addItem("1982");
 		year.addItem("1983");
 		year.addItem("1984");
 		year.addItem("1985");
+		year.addItem("1986");
+		year.addItem("1987");
+		year.addItem("1988");
+		year.addItem("1989");
+		year.addItem("1990");
+		year.addItem("1991");
+		year.addItem("1992");
+		year.addItem("1993");
+		year.addItem("1994");
+		year.addItem("1995");
+		year.addItem("1996");
+		year.addItem("1997");
+		year.addItem("1998");
+		year.addItem("1999");
+		year.addItem("2000");
+		year.addItem("2001");
+		year.addItem("2002");
+		year.addItem("2003");
+		year.addItem("2004");
+		year.addItem("2005");
+		
 		
 		
 		year.setBounds(125, 130, 100, 30);
@@ -203,14 +259,22 @@ public class CreateView extends JPanel implements ActionListener {
 	private void initPhone() {
 		JLabel label = new JLabel("Phone:", SwingConstants.RIGHT);
 		label.setBounds(35, 170, 95, 30);
-		label.setLabelFor(phone);
+		label.setLabelFor(phone1);
 		label.setFont(new Font("DialogInput", Font.BOLD, 12));
 		
-		phone = new JTextField(20);
-		phone.setBounds(125, 170, 200, 30);
+		phone1 = new JTextField(20);
+		phone1.setBounds(125, 170, 50, 30);
+		
+		phone2 = new JTextField(20);
+		phone2.setBounds(185, 170, 50, 30);
+		
+		phone3 = new JTextField(20);
+		phone3.setBounds(235, 170, 70, 30);
 		
 		this.add(label);
-		this.add(phone);
+		this.add(phone1);
+		this.add(phone2);
+		this.add(phone3);
 	}
 	
 	private void initPin() {
@@ -365,7 +429,8 @@ public class CreateView extends JPanel implements ActionListener {
 		//String stated = (String) state.getSelectedItem();
 		int ddateOB = Integer.parseInt(dateOB);
 		long accountnum = manager.newAccountNumber();
-		account = new BankAccount('Y', accountnum, 0.00, newUser(pin, ddateOB, Long.parseLong(phone.getText()), firstName.getText(), lastName.getText(), streetAddress.getText(), city.getText(), states, zip.getText()));
+		long phone = Long.parseLong(phone1.getText() + phone2.getText() + phone3.getText());
+		account = new BankAccount('Y', accountnum, 0.00, newUser(pin, ddateOB, phone, firstName.getText(), lastName.getText(), streetAddress.getText(), city.getText(), states, zip.getText()));
 		return account;
 	}
 	

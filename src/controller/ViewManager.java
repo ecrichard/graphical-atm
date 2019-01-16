@@ -10,7 +10,9 @@ import data.Database;
 import model.BankAccount;
 //import model.User;
 import view.ATM;
+import view.EditView;
 import view.HomeView;
+import view.InformationView;
 import view.LoginView;
 
 public class ViewManager {
@@ -59,25 +61,22 @@ public class ViewManager {
 				hv.initDepositButton();
 				hv.initWithdrawButton();
 				hv.initTransferButton();
+				hv.initCloseAccountButton();
+				hv.initEditAccountButton();
+				
+				EditView ev = ((EditView) views.getComponents()[ATM.EDIT_VIEW_INDEX]);
+				ev.initaccountNumber();
+				ev.initeditButton();
+				ev.inithomeButton();
+				
+				InformationView iv = ((InformationView) views.getComponents()[ATM.INFORMATION_VIEW_INDEX]);
+				iv.initallInfo();
+				iv.initEditButton();
+				iv.inithomeButton();
 			}
 		} catch (NumberFormatException e) {
 			// ignore
 		}
-	}
-	
-	public void create() {
-		try {
-			switchTo(ATM.HOME_VIEW);
-			HomeView hv = ((HomeView) views.getComponents()[ATM.HOME_VIEW_INDEX]);
-			hv.initDisplayInfo();
-			hv.initDepositButton();
-			hv.initWithdrawButton();
-			hv.initTransferButton();
-		}
-		catch (NumberFormatException e) {
-			// ignore
-		}
-
 	}
 	
 	public long newAccountNumber() throws SQLException {
@@ -109,6 +108,41 @@ public class ViewManager {
 		return balance;
 	}
 	
+	public String getStreetAddress() {
+		String streetAddress = account.getUser().getStreetAddress();
+		return streetAddress;
+	}
+	
+	public String getCity() {
+		String city = account.getUser().getCity();
+		return city;
+	}
+	
+	public String getState() {
+		String state = account.getUser().getState();
+		return state;
+	}
+	
+	public String getPostal() {
+		String postal = account.getUser().getZip();
+		return postal;
+	}
+	
+	public int getDOB() {
+		int dob = account.getUser().getDob();
+		return dob;
+	}
+	
+	public long getPhone() {
+		long phone = account.getUser().getPhone();
+		return phone;
+	}
+	
+	public int getPin() {
+		int pin = account.getUser().getPin();
+		return pin;
+	}
+	
 	public void deposit(double amount) {
 		account.deposit(amount);
 		db.updateAccount(account);
@@ -123,6 +157,11 @@ public class ViewManager {
 		account.transfer(destination, amount);
 		db.updateAccount(destination);
 		db.updateAccount(account);
+	}
+	
+	public void closeAccount(long accountNumber) {
+		BankAccount temp = db.getAccount(accountNumber);
+		db.closeAccount(temp);
 	}
 	
 	/**

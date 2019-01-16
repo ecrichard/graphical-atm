@@ -1,5 +1,6 @@
 package view;
 
+import java.awt.Color;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -21,6 +22,7 @@ public class WithdrawView extends JPanel implements ActionListener{
 	private JTextField damount;
 	private JButton WithdrawButton;
 	
+	
 	public WithdrawView(ViewManager manager) {
 		super();
 		
@@ -40,6 +42,15 @@ public class WithdrawView extends JPanel implements ActionListener{
 		inithomeButton();
 		initgetAmount();
 		initWithdrawButton();
+		initErrorMessageLabel();
+	}
+	
+	private void initErrorMessageLabel() {
+		errorMessageLabel.setBounds(0, 240, 500, 35);
+		errorMessageLabel.setFont(new Font("DialogInput", Font.ITALIC, 14));
+		errorMessageLabel.setForeground(Color.RED);
+		
+		this.add(errorMessageLabel);
 	}
 	
 	private void inithomeButton() {	
@@ -80,7 +91,12 @@ public class WithdrawView extends JPanel implements ActionListener{
 		} 
 		else if (source.equals(WithdrawButton)) {
 			double amount = Double.parseDouble(damount.getText());
-			manager.withdraw(amount);
+			if(amount >= 0.01 && !Double.isNaN(amount)) {
+				manager.withdraw(amount);
+			}
+			else {
+				System.err.println("ERROR: input an amount that is greater than $0");
+			}
 		}
 		
 	}

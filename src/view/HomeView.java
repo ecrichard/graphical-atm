@@ -5,6 +5,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.IOException;
 import java.io.ObjectOutputStream;
+import java.text.DecimalFormat;
 
 import javax.swing.JButton;
 //import javax.swing.JLabel;
@@ -22,6 +23,8 @@ public class HomeView extends JPanel implements ActionListener {
 	private JButton depositButton;
 	private JButton withdrawButton;
 	private JButton transferButton;
+	private JButton closeButton;
+	private JButton editButton;
 	private long number;
 	private String first;
 	private String last;
@@ -65,13 +68,17 @@ public class HomeView extends JPanel implements ActionListener {
 		// feel free to use my layout in LoginView as an example for laying out and
 		// positioning your components.
 	}
-	private void initLoginButton() {	
+	
+	
+	
+	void initLoginButton() {	
 		loginButton = new JButton("Logout");
 		loginButton.setBounds(205, 180, 200, 35);
 		loginButton.addActionListener(this);
 		
 		this.add(loginButton);
 	}
+	
 	
 	public void initDisplayInfo() {
 		//System.out.println(helpaccount.accountNum);
@@ -82,10 +89,13 @@ public class HomeView extends JPanel implements ActionListener {
 		
 		
 		
+		DecimalFormat df2 = new DecimalFormat( "###,##0.00" );
+	
+		
 		this.add(new javax.swing.JLabel("\nFirst name: " + first, javax.swing.SwingConstants.CENTER));
 		this.add(new javax.swing.JLabel("\nLast name: " + last, javax.swing.SwingConstants.CENTER));
 		this.add(new javax.swing.JLabel("\nAccount Number: " + number, javax.swing.SwingConstants.CENTER));
-		this.add(new javax.swing.JLabel("\nBalance: $" + balance, javax.swing.SwingConstants.CENTER));
+		this.add(new javax.swing.JLabel("\nBalance: $" + df2.format(balance), javax.swing.SwingConstants.CENTER));
 	}
 	
 	public void initDepositButton() {
@@ -110,6 +120,20 @@ public class HomeView extends JPanel implements ActionListener {
 		transferButton.addActionListener(this);
 		
 		this.add(transferButton);
+	}
+	
+	public void initCloseAccountButton() {
+		closeButton = new JButton("Close Account");
+		closeButton.addActionListener(this);
+		
+		this.add(closeButton);
+	}
+	
+	public void initEditAccountButton() {
+		editButton = new JButton("Edit Account Information");
+		editButton.addActionListener(this);
+		
+		this.add(editButton);
 	}
 	
 	/*
@@ -146,6 +170,13 @@ public class HomeView extends JPanel implements ActionListener {
 		}
 		else if(source.equals(transferButton)) {
 			manager.switchTo(ATM.TRANSFER_VIEW);
+		}
+		else if(source.equals(editButton)) {
+			manager.switchTo(ATM.INFORMATION_VIEW);
+		}
+		else if(source.equals(closeButton)) {
+			manager.closeAccount(manager.getAccountNum());
+			manager.switchTo(ATM.LOGIN_VIEW);
 		}
 		// TODO
 		//
